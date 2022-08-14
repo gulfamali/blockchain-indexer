@@ -1,7 +1,6 @@
 const ResponseHandler = require("./response");
 
-const ExceptionHandler = (err, req, res, next) => {
-  let error = { ...err };
+const ExceptionHandler = (error, req, res, next) => {
   
   switch (error.name) {
     case "ValidationError":
@@ -10,8 +9,8 @@ const ExceptionHandler = (err, req, res, next) => {
       break;
   }
 
-  console.log(`Exception: ${error.message}`.red)
-  console.log(error.stackTrace);
+  console.log(`Exception Handler Triggered: ${new Date().toString()}`.white.bgRed)
+  console.log(error.stack.red);
   
   ResponseHandler(res, {
     http: 500,

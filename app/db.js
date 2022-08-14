@@ -1,4 +1,4 @@
-const knex = require('knex')({
+exports.knex = require('knex')({
     client: 'mysql2',
     port: 3306,
     connection: {
@@ -15,14 +15,12 @@ const knex = require('knex')({
     }
 });
 
-const check = () => {
+exports.check = () => {
 
-    knex.raw('SELECT 1').then(() => {
+    this.knex.raw('SELECT 1').then(() => {
         // Success / boot rest of app
     }).catch(err => {
         // Failure / timeout
         throw err
     });
 }
-
-module.exports = { knex, check };

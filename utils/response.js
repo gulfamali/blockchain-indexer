@@ -1,4 +1,4 @@
-const ResponseHandler = (res, data) => {
+const Response = (res, data) => {
     console.log(data);
 
     const http = data?.http || 200;
@@ -11,4 +11,4 @@ const ResponseHandler = (res, data) => {
     })
 }
 
-module.exports = ResponseHandler;
+module.exports = Response;
