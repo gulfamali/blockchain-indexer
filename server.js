@@ -9,6 +9,7 @@ const colors = require("colors");
 const cors = require("cors");
 const ResponseHandler = require("./utils/response");
 const ExceptionHandler = require("./utils/exception");
+const CronJobs = require("./utils/cron");
 
 const app = express();
 
@@ -21,6 +22,8 @@ if (process.env.NODE_ENV == "development") {
 
 require("./routes/index")(app);
 app.use(ExceptionHandler);
+
+CronJobs.startJobs();
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(

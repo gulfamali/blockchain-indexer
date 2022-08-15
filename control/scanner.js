@@ -4,6 +4,6 @@ const Response = require("../utils/response");
 
 
 exports.startscan = asyncHandler(async(req, res, next) => {
-    await Scanner.scan();
+    await Scanner.scanTransactions();
     Response(res, {http: 200});
 });

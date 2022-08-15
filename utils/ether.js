@@ -8,3 +8,11 @@ exports.latestBlockNumber = () => {
 exports.getBlock=(blockNumber)=>{
     return web3.eth.getBlock(blockNumber);
 }
+
+exports.getTransaction=(transHash)=>{
+    return web3.eth.getTransaction(transHash);
+}
+
+exports.getTransReceipt=(transHash)=>{
+    return web3.eth.getTransactionReceipt(transHash);
+}
