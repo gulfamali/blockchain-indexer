@@ -7,7 +7,6 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const colors = require("colors");
 const cors = require("cors");
-const ResponseHandler = require("./utils/response");
 const ExceptionHandler = require("./utils/exception");
 const CronJobs = require("./utils/cron");
 

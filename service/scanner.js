@@ -7,6 +7,9 @@ const ScanTime = parseInt(process.env.SCAN_TIME)*60*1000;
 exports.scanBlocks=async()=>{
     let startStamp = new Date().getTime();
     const lastBlock = await Blocks.getTopBlockHeight();
+
+    console.log(`\n Blocks indexer started: ${new Date().toLocaleString()}`.yellow);
+
     if(lastBlock){
         let blockNumber = lastBlock.height;
         let proceed = true;
@@ -16,14 +19,16 @@ exports.scanBlocks=async()=>{
         while(proceed){
             blockNumber++;
             const check = await this.storeBlock(blockNumber);
-            if(check){
-                console.log(`Block ${blockNumber} inserted.`.green)
-            } else {
-                console.log(`Blockchain end reached or indexing failed.`.bgGreen.white);
+            if(!check){
+                console.log(`Blockchain end reached or indexing failed. Exiting scanner.`.bgGreen.white);
                 proceed = false;
+            }
+            else{
+                console.log(`Block ${blockNumber} inserted.`.green);
             }
 
             if(new Date().getTime() - startStamp > ScanTime){
+                console.log(`Scanning time exceeded. Exiting scanner.`.bgGreen.white);
                 proceed = false
             }
         }
@@ -46,28 +51,21 @@ exports.storeBlock=async(blockNumber)=>{
 }
 
 exports.scanTransactions=async()=>{
-    let startStamp = new Date().getTime();
-    let proceed = true;
+    console.log(`\n Trans indexer started: ${new Date().toLocaleString()}`.yellow);
 
-    while(proceed){
-        const transBatch = await BlockTrans.getRecords({scanComplete: 0}, 0, 50);
+    const transBatch = await BlockTrans.getRecords({scanComplete: 0}, 0, 250);
 
-        if( transBatch?.length < 1 || (new Date().getTime() - startStamp > ScanTime) ){
-            console.log(`All transactions are indexed.`.bgGreen.white);
-            proceed = false;
-        }
-        else{
-            for (let i=0; i < transBatch.length; i++){
-                const trans = transBatch[i];
-                const check = await this.storeTransactions(trans.hash);
-                
-                console.log(`Trans updation: ${check ? 'success'.green: 'fail'.red}`);
+    if( transBatch?.length < 1){
+        console.log(`All transactions are indexed.`.bgGreen.white);
+    }
+    else{
+        for (let i=0; i < transBatch.length; i++){
+            const trans = transBatch[i];
+            const check = await this.storeTransactions(trans.hash);
 
-                if(!check){
-                    proceed = false;
-                    console.log('Exiting scanner...'.yellow);
-                    break;
-                }
+            if(!check){
+                console.log(`Trans updation failed. Exiting scanner.`.red);
+                break;
             }
         }
     }

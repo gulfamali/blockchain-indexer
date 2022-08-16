@@ -9,11 +9,11 @@ function demoJobFn(){
 
 const demoJob = new CronJob(`0 * * * * *`, demoJobFn);
 const blocksJob = new CronJob(`0 */${ScanTime} * * * *`, scannerService.scanBlocks);
-const transJob = new CronJob(`0 */${ScanTime} * * * *`, scannerService.scanTransactions);
+const transJob = new CronJob(`0 */5 * * * *`, scannerService.scanTransactions);
 
 /** Cron Jobs Start & Stop */
 exports.startJobs = function(){
     //demoJob.start();
-    blocksJob.start();
+    //blocksJob.start();
     transJob.start()
 }
